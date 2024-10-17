@@ -3,8 +3,8 @@ import { IProject } from "../../interfaces/project.interface";
 import { UsersProjectsEntity } from "../../users/entities/usersProjects.entity";
 import { Column, Entity, OneToMany } from "typeorm";
 
-@Entity({ name: 'proyects' })
-export class ProyectsEntity extends BaseEntity implements IProject {
+@Entity({ name: 'projects' })
+export class ProjectsEntity extends BaseEntity implements IProject {
   @Column()
   name: string;
 

@@ -2,7 +2,7 @@ import { BaseEntity } from "../../config/base.entity"
 import { ACCESS_LEVEL } from "../../constants"
 import { Column, Entity, ManyToOne } from "typeorm"
 import { UsersEntity } from "./users.entity"
-import { ProyectsEntity } from "../../proyects/entities/proyects.entity";
+import { ProjectsEntity } from "../../projects/entities/projects.entity";
 
 @Entity({ name: 'users_projects' })
 export class UsersProjectsEntity extends BaseEntity {
@@ -15,6 +15,6 @@ export class UsersProjectsEntity extends BaseEntity {
   @ManyToOne(() => UsersEntity, (user) => user.projectsIncludes)
   user: UsersEntity;
 
-  @ManyToOne(() => ProyectsEntity, (project) => project.usersIncludes)
-  project: ProyectsEntity;
+  @ManyToOne(() => ProjectsEntity, (project) => project.usersIncludes)
+  project: ProjectsEntity;
 }
