@@ -5,6 +5,7 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { UserDTO, UserToProjectDto, UserUpdateDTO } from '../dto/user.dto';
 import { ErrorManager } from 'src/utils/error.manager';
 import { UsersProjectsEntity } from '../entities/usersProjects.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -17,7 +18,12 @@ export class UsersService {
 
   public async createUser(body: UserDTO): Promise<UsersEntity> {
     try {
-      return await this.usersRepository.save(body);
+      const newUserPassword = await bcrypt.hash(body.password, +process.env.HASH_SALT);
+      const newUser: UsersEntity = this.usersRepository.create({
+        ...body,
+        password: newUserPassword
+      })
+      return await this.usersRepository.save(newUser);
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
@@ -95,6 +101,20 @@ export class UsersService {
   public async relationToProject(body: UserToProjectDto) {
     try {
       return await this.UsersProjectsRepository.save(body);
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async findBy({key, value}: {key: keyof UserDTO, value: string}): Promise<UsersEntity> {
+    try {
+      const user: UsersEntity = await this.usersRepository
+        .createQueryBuilder('users')
+        .addSelect('users.password')
+        .where({ [key]: value })
+        .getOne();
+        
+      return user;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
