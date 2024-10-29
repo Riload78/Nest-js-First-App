@@ -1,9 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { AccessLevel } from 'src/auth/decorators/access-level.decorator';
+import { AccessLevelGuard } from 'src/auth/guards/access-level.guard';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { ProjectDto, ProjectUpdateDto } from 'src/projects/dto/project.dto';
 import { ProjectsEntity } from 'src/projects/entities/projects.entity';
 import { ProjectsService } from 'src/projects/services/projects/projects.service';
 
 @Controller('projects')
+@UseGuards(AuthGuard, RolesGuard, AccessLevelGuard)
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
@@ -18,7 +23,7 @@ export class ProjectsController {
   public async findAllProjects(): Promise<ProjectsEntity[]> {
     return await this.projectsService.findAllProjects();
   }
-
+  @AccessLevel(50)
   @Get(':id')
   public async findProjectById(
     @Param('id') id: string,

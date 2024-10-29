@@ -4,9 +4,13 @@ import { UserDTO, UserToProjectDto, UserUpdateDTO } from '../dto/user.dto';
 import { UsersEntity } from '../entities/users.entity';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { PublicAccess } from 'src/auth/decorators/public.decorator';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { AdminAccess } from 'src/auth/decorators/admin.decorator';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { ROLES } from 'src/constants';
 
 @Controller('users')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RolesGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -15,6 +19,7 @@ export class UsersController {
     return await this.usersService.createUser(body);
   }
 
+  @Roles('ADMIN')
   @Get('all')
   public async findAllUsers(): Promise<UsersEntity[]> {
     return await this.usersService.findUsers();

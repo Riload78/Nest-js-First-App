@@ -6,21 +6,21 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
-import { Observable } from 'rxjs';
 import { UsersService } from 'src/users/services/users.service';
 import { useToken } from 'src/utils/use.token';
 import { IUseToken } from '../interfaces/auth.interface';
+import { PUBLIC_KEY } from 'src/constants/key-decorators';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly UsersService: UsersService,
-    private readonly reflector: Reflector,
+    private readonly reflector: Reflector, // permite leer los decoradores
   ) {}
   async canActivate(context: ExecutionContext) {
     //
     const isPublic = this.reflector.get<boolean>(
-      'isPublic',
+      PUBLIC_KEY,
       context.getHandler(),
     );
 
@@ -49,7 +49,7 @@ export class AuthGuard implements CanActivate {
     }
 
     req.idUser = user.id;
-    req.role = user.role;
+    req.roleUser = user.role;
     return true;
   }
 }
