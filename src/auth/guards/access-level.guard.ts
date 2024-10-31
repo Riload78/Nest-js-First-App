@@ -50,7 +50,7 @@ export class AccessLevelGuard implements CanActivate {
     }
   }
 
-   if (roleUser === ROLES.ADMIN) {
+   if (roleUser === ROLES.ADMIN || roleUser === ROLES.CREATOR) {
      return true;
    }
 

@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { AccessLevel } from 'src/auth/decorators/access-level.decorator';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 import { AccessLevelGuard } from 'src/auth/guards/access-level.guard';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
@@ -12,11 +13,13 @@ import { ProjectsService } from 'src/projects/services/projects/projects.service
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
-  @Post('create')
+  @Roles('CREATOR')
+  @Post('create/userOwner/:userId')
   public async createProject(
     @Body() body: ProjectDto,
+    @Param('userId') userId: string,
   ): Promise<ProjectsEntity> {
-    return await this.projectsService.createProject(body);
+    return await this.projectsService.createProject(body, userId);
   }
 
   @Get('all')

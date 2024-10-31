@@ -14,17 +14,18 @@ import { ROLES } from 'src/constants';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @PublicAccess()
   @Post('register')
   public async registerUser(@Body() body: UserDTO): Promise<UsersEntity> {
     return await this.usersService.createUser(body);
   }
 
-  @Roles('ADMIN')
+  @AdminAccess()
   @Get('all')
   public async findAllUsers(): Promise<UsersEntity[]> {
     return await this.usersService.findUsers();
   }
-  
+
   @PublicAccess()
   @Get(':id')
   public async findUserById(@Param('id') id: string): Promise<UsersEntity> {

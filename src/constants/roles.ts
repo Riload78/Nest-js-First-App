@@ -1,6 +1,7 @@
 export enum ROLES {
-    BASIC = 'basic',
-    ADMIN = 'admin'
+    BASIC = 'BASIC',
+    CREATOR = 'CREATOR',
+    ADMIN = 'ADMIN',
 }
 
 export enum ACCESS_LEVEL {
