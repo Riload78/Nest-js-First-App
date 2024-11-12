@@ -3,10 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ACCESS_LEVEL } from 'src/constants';
 import { ProjectDto, ProjectUpdateDto } from 'src/projects/dto/project.dto';
 import { ProjectsEntity } from 'src/projects/entities/projects.entity';
+import { TasksProjectsEntity } from 'src/tasks/entities/tasksProjects.entity';
 import { UsersProjectsEntity } from 'src/users/entities/usersProjects.entity';
 import { UsersService } from 'src/users/services/users.service';
 import { ErrorManager } from 'src/utils/error.manager';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, In, Repository, UpdateResult } from 'typeorm';
 
 @Injectable()
 export class ProjectsService {
@@ -102,4 +103,5 @@ export class ProjectsService {
 			throw ErrorManager.createSignatureError(error.message);
 		}
 	}
+ 
 }

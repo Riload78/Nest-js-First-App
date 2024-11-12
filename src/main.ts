@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import * as morgan from 'morgan';
 import { CORS } from './constants';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,8 +22,19 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
 
   const configService = app.get(ConfigService);
-  app.setGlobalPrefix('api');
   app.enableCors(CORS);
+  
+  const config = new DocumentBuilder()
+  .setTitle('TASK API')
+  .setDescription('Aplicación de gestión de tareas')
+  .setVersion('1.0')
+  .build();
+  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, documentFactory);
+  
+  
+  app.setGlobalPrefix('api');
+
   await app.listen(configService.get('PORT'));
   console.log(`The application is running on: ${await app.getUrl()}`);
 }

@@ -1,11 +1,14 @@
 import { IsNotEmpty, IsString } from "class-validator";
 import { IAuthBody } from "../interfaces/auth.interface";
+import { ApiProperty } from "@nestjs/swagger";
 
 export class AuthDto implements IAuthBody {
-    @IsNotEmpty()
-    username: string
-    
-    @IsString()
-    @IsNotEmpty()
-    password: string
+  @ApiProperty()
+  @IsNotEmpty()
+  username: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  password: string;
 }

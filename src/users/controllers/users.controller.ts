@@ -6,8 +6,7 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { PublicAccess } from 'src/auth/decorators/public.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { AdminAccess } from 'src/auth/decorators/admin.decorator';
-import { Roles } from 'src/auth/decorators/roles.decorator';
-import { ROLES } from 'src/constants';
+import { ApiHeader } from '@nestjs/swagger';
 
 @Controller('users')
 @UseGuards(AuthGuard, RolesGuard)
@@ -26,6 +25,7 @@ export class UsersController {
     return await this.usersService.findUsers();
   }
 
+  @ApiHeader({ name: 'codrr_token' })
   @PublicAccess()
   @Get(':id')
   public async findUserById(@Param('id') id: string): Promise<UsersEntity> {
